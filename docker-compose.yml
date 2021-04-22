@@ -1,0 +1,36 @@
+version: '3.7'
+services:
+  app:
+    build:
+      context: ./config
+      dockerfile: Dockerfile
+    image: webdev
+    container_name: webdev-app
+    restart: unless-stopped
+    volumes:
+      - './app/${APP_DIRECTORY}/:/var/www/'
+  nginx:
+    image: 'nginx:1.19.7-alpine'
+    container_name: webdev-nginx
+    restart: unless-stopped
+    volumes:
+      - './app/${APP_DIRECTORY}/:/var/www'
+      - './nginx:/etc/nginx/conf.d'
+    ports:
+      - '8000:80'
+  mysql:
+    image: 'mysql:8.0'
+    container_name: webdev-mysql
+    command: '--default-authentication-plugin=mysql_native_password'
+    restart: unless-stopped
+    environment:
+      - 'MYSQL_ROOT_PASSWORD=${DB_PASSWORD}'
+      - 'MYSQL_DATABASE=${DB_DATABASE}'
+      - 'MYSQL_USER=${DB_USERNAME}'
+      - 'MYSQL_PASSWORD=${DB_PASSWORD}'
+      - SERVICE_TAGS=dev
+      - SERVICE_NAME=mysql
+    volumes:
+      - './.mysql:/var/lib/mysql'
+    ports:
+      - '${DB_PORT}:3306'

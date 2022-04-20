@@ -1,35 +1,38 @@
 FROM php:7.4-fpm
-
 ARG uid=1000
 ARG user=erison
 
 # Instalação de dependencias
 RUN apt-get update && \
     apt-get -y --no-install-recommends install \
-    git unzip libaio1 nano libldap2-dev  \
+    git unzip libaio1 nano libldap2-dev unixodbc-dev \
     && apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
 # Instalação das configurações para LDAP e OCI8
 RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
-    docker-php-ext-install ldap
-
-RUN docker-php-ext-install pdo_mysql
+    docker-php-ext-install ldap && docker-php-ext-install pdo_mysql
 
 # Config de Usuario docker
 RUN useradd -G www-data,root -u $uid -d /home/user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
-
-# Instalação composer
+# ####################################
+# COMPOSER
+# ####################################
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 
 # ####################################
-# INSTALL ORACLE INSTANTCLIENT
+# SQLSRV
+# ####################################
+RUN pecl install sqlsrv pdo_sqlsrv
+RUN docker-php-ext-enable sqlsrv && docker-php-ext-enable pdo_sqlsrv
+
+# ####################################
+# ORACLE INSTANTCLIENT
 # ####################################
 RUN mkdir /opt/oracle && cd /opt/oracle
-
 ADD oracle/instantclient-basic-linux.x64-12.1.0.2.0.zip /opt/oracle
 ADD oracle/instantclient-sdk-linux.x64-12.1.0.2.0.zip /opt/oracle
 

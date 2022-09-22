@@ -50,7 +50,7 @@ networks:
 volumes:
   flow-mysql:
     driver: local
-  flow-redis:
+  flow-nginx:
     driver: local
-  flow-meilisearch:
+  flow-app:
     driver: local

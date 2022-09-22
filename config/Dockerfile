@@ -15,7 +15,7 @@ RUN apt-get -y update \
     && apt-get install -y libicu-dev \ 
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
-    && docker-php-ext-enable sodium
+    && docker-php-ext-enable sodium 
 
 # Config de Usuario docker
 RUN useradd -G www-data,root -u $uid -d /home/user $user

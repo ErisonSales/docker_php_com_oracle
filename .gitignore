@@ -1,3 +1,4 @@
 dev
 .mysql
+.env
 app

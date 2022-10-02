@@ -12,6 +12,9 @@ services:
       - './app/${APP_DIRECTORY}/:/var/www/'
     networks:
       - flow
+    depends_on:
+      - nginx
+      - mysql
   # -----------------------------------------------
   nginx:
     image: 'nginx:1.19.7-alpine'

@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.1-fpm
 ARG uid=1000
 ARG user=dev
 
@@ -52,7 +52,7 @@ RUN  unzip /opt/oracle/instantclient-basic-linux.x64-12.1.0.2.0.zip -d /opt/orac
 ENV LD_LIBRARY_PATH  /opt/oracle/instantclient_12_1:${LD_LIBRARY_PATH}
 
 # Instalacao libs oracle php
-RUN echo 'instantclient,/opt/oracle/instantclient_12_1/' | pecl install oci8-2.2.0 \
+RUN echo 'instantclient,/opt/oracle/instantclient_12_1/' | pecl install oci8 \
     && docker-php-ext-enable oci8 \
     && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_12_1,12.1 \
     && docker-php-ext-install pdo_oci 

@@ -5,20 +5,26 @@ ARG user=dev
 # Instalação de pacotes e dependencias
 RUN apt-get update && \
     apt-get -y --no-install-recommends install \
-    git unzip libaio1 nano libldap2-dev unixodbc-dev npm \
+    git unzip libaio1 nano libldap2-dev unixodbc-dev npm imagemagick\
     && apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
     docker-php-ext-install ldap && docker-php-ext-install pdo_mysql
 
 RUN apt-get -y update \
-    && apt-get install -y libicu-dev \ 
+    && apt-get install -y libicu-dev libpng-dev\ 
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
-    && docker-php-ext-enable sodium 
+    && docker-php-ext-enable sodium \
+    && docker-php-ext-install gd
+
+RUN apt-get update && apt-get install -y \
+    libmagickwand-dev --no-install-recommends \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick
 
 # Config de Usuario docker
-RUN useradd -G www-data,root -u $uid -d /home/user $user
+RUN useradd -G www-data,root -u $uid -d /home/ $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 

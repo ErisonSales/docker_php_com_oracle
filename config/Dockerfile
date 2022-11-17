@@ -1,6 +1,9 @@
 FROM php:8.1-fpm
 ARG uid=1000
 ARG user=dev
+RUN echo ˜-----------------------------------------˜
+RUN echo $user
+RUN echo ˜-----------------------------------------˜
 
 # Instalação de pacotes e dependencias
 RUN apt-get update && \
@@ -24,7 +27,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-enable imagick
 
 # Config de Usuario docker
-RUN useradd -G www-data,root -u $uid -d /home/ $user
+RUN useradd -G www-data,root -u $uid -d /home/dev/ $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 

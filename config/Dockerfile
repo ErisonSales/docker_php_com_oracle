@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 ARG uid=1000
 ARG user=dev
 RUN echo ˜-----------------------------------------˜

@@ -1,9 +1,6 @@
 FROM php:8.2-fpm
 ARG uid=1000
 ARG user=dev
-RUN echo ˜-----------------------------------------˜
-RUN echo $user
-RUN echo ˜-----------------------------------------˜
 
 # Instalação de pacotes e dependencias
 RUN apt-get update && \
